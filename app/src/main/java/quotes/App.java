@@ -5,19 +5,56 @@ package quotes;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class App {
-
-
     public static void main(String[] args){
         String path = "./app/src/main/resources/recentquotes.json";
-        getQuote(path);
+        String apiUrl = "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
+//        getQuote(path);
+        apiQuotes(apiUrl);
     }
-    public static List getQuote(String path) {
+
+    public static String apiQuotes(String  apiUrl){
+            String createdLine = "";
+        try {
+            URL url = new URL(apiUrl);
+            HttpURLConnection connect = (HttpURLConnection) url.openConnection();
+            connect.setRequestMethod("GET");
+            connect.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+            int status = connect.getResponseCode();
+            if(status == 200){
+                InputStream input = connect.getInputStream();
+                InputStreamReader reader = new InputStreamReader(input);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                String line = bufferedReader.readLine();
+                while(line != null){
+                    System.out.println(line);
+                    line = bufferedReader.readLine();
+                    if (line != null) {
+                        createdLine = createdLine + line;
+                    }
+                }
+                bufferedReader.close();
+                FileWriter fileToWrite = new FileWriter("addQuote.json");
+                fileToWrite.write(createdLine);
+                fileToWrite.close();
+            } else{
+                System.out.println("An error occurred with status "+status);
+                getQuote("./app/src/main/resources/recentquotes.json");
+            }
+            connect.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return createdLine;
+    }
+
+    public static List<Quotes> getQuote(String path) {
         Gson gson = new Gson();
         FileReader fileReader = null;
         try {

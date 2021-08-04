@@ -18,9 +18,15 @@ class AppTest {
         for (Object i : allQuotes) {
             saveQuotes.add(i.toString());
         }
-        assertEquals( true , saveQuotes.contains("{author: Cassandra Clare, text:  “Have you fallen in love with the wrong person yet?'}") );
-        assertEquals( true , saveQuotes.contains("{author: Mark Lawrence, text:  “A Dark time comes. }") );
-        assertEquals( false , saveQuotes.contains("{author:  W. Purkey, text: nobody watching}") );
-        assertEquals( true , saveQuotes.contains("{author: William W. Purkey, text:  “You've gotta dance like there's nobody watching}") );
+        assertTrue(saveQuotes.contains("{author: Cassandra Clare, text:  “Have you fallen in love with the wrong person yet?'}"));
+        assertTrue(saveQuotes.contains("{author: Mark Lawrence, text:  “A Dark time comes. }"));
+        assertFalse(saveQuotes.contains("{author:  W. Purkey, text: nobody watching}"));
+        assertTrue(saveQuotes.contains("{author: William W. Purkey, text:  “You've gotta dance like there's nobody watching}"));
+    }
+
+    @Test void testApiReader() {
+        String apiUrl = "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
+        String testQuote =  App.apiQuotes(apiUrl);
+        assertTrue(testQuote != null);
     }
 }

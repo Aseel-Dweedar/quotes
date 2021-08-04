@@ -20,4 +20,16 @@ Chose run and the app should print one random quote and its uther.
 
 **Teat the app** :
 
-You can test the app from intlliJ by run the wroted test. or you can run it by using `./gradlew test`.
+You can test the app from intlliJ by run the written test. or you can run it by using `./gradlew test`.
+
+# Potent Quotables
+
+Include a method `apiQuotes()` that make a request to an API to get a random quote. show this random quote. add it to json file of quotes, for use if the app goes offline in the future
+
+**Run the app** :
+
+Chose run and the app should print one random quote from Api and add it to json file `addQuote`.
+
+**Teat the app** :
+
+You can test the app from intlliJ by run the written test. or you can run it by using `./gradlew test`.

@@ -20,7 +20,7 @@ public class App {
     }
 
     public static String apiQuotes(String  apiUrl){
-            String createdLine = "";
+            StringBuilder createdLine = new StringBuilder();
         try {
             URL url = new URL(apiUrl);
             HttpURLConnection connect = (HttpURLConnection) url.openConnection();
@@ -32,16 +32,17 @@ public class App {
                 InputStreamReader reader = new InputStreamReader(input);
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 String line = bufferedReader.readLine();
+                createdLine = new StringBuilder(line);
                 while(line != null){
                     System.out.println(line);
                     line = bufferedReader.readLine();
                     if (line != null) {
-                        createdLine = createdLine + line;
+                        createdLine.append(line);
                     }
                 }
                 bufferedReader.close();
                 FileWriter fileToWrite = new FileWriter("addQuote.json");
-                fileToWrite.write(createdLine);
+                fileToWrite.write(createdLine.toString());
                 fileToWrite.close();
             } else{
                 System.out.println("An error occurred with status "+status);
@@ -51,7 +52,7 @@ public class App {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return createdLine;
+        return createdLine.toString();
     }
 
     public static List<Quotes> getQuote(String path) {
